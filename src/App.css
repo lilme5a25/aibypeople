@@ -1,0 +1,830 @@
+/* Global Reset & Body */
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white !important;
+  /* Force clean white */
+  overflow: hidden;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* ----------------- Splash / Logo Styles ----------------- */
+
+.image-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-block;
+  max-width: 50vw;
+  z-index: 10;
+  /* Initial state */
+  transform: translate(-50%, -50%) scale(0.1) rotate(0deg);
+  /* Performance hint */
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  /* Bouncy elastic spin */
+  animation: spinAndGrow 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+    floatPulse 2.5s ease-in-out 1.5s infinite;
+}
+
+@keyframes spinAndGrow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.1) rotate(0deg);
+  }
+
+  80% {
+    transform: translate(-50%, -50%) scale(2.05) rotate(1800deg);
+  }
+
+  90% {
+    transform: translate(-50%, -50%) scale(1.9) rotate(1800deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(2) rotate(1800deg);
+  }
+}
+
+@keyframes floatPulse {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(2) rotate(1800deg);
+  }
+
+  50% {
+    transform: translate(-50%, -52%) scale(2.05) rotate(1800deg);
+  }
+}
+
+/* Phase 2: Hyper Spin Exit */
+.hyper-spin {
+  animation: hyperSpin 0.7s cubic-bezier(0.7, 0, 0.84, 0) forwards !important;
+}
+
+@keyframes hyperSpin {
+  0% {
+    transform: translate(-50%, -50%) scale(2) rotate(1800deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(50) rotate(2880deg);
+    /* +3 rotations, huge scale */
+    opacity: 0;
+    /* Fade out at the very end if needed, or just consume screen */
+  }
+}
+
+.base-image {
+  display: block;
+  width: 100%;
+  max-width: 30vw;
+  min-width: 15vw;
+  height: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.screen-blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 5;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.8s ease, backdrop-filter 0.8s ease;
+}
+
+.screen-blur.hidden {
+  opacity: 0;
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
+}
+
+@media (max-width: 768px) {
+  .screen-blur {
+    transition: opacity 0.2s ease, backdrop-filter 0.2s ease;
+  }
+}
+
+.locked-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: auto;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Background Vector Style */
+.background-vector {
+  position: fixed;
+  top: 50%;
+  right: 70%;
+  transform: translateY(-50%);
+  width: clamp(250px, 35vw, 544px);
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(40px);
+  animation: revealVector 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.9s forwards;
+}
+
+/* Standard Desktop Animations */
+@keyframes revealVector {
+  0% {
+    opacity: 0;
+    filter: blur(40px);
+    transform: translate(-40px, -40px) translateY(-50%) scale(0.85);
+  }
+
+  20% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate(0, 0) translateY(-50%) scale(1);
+  }
+}
+
+/* Simple Mobile Reveal (No Transform Conflicts) */
+@keyframes revealMobile {
+  0% {
+    opacity: 0;
+    filter: blur(20px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Loader Text Style */
+.loader-text {
+  position: fixed;
+  top: 50%;
+  left: 75%;
+  transform: translateY(-50%);
+  color: #494944;
+  font-family: 'Satoshi-Bold', sans-serif;
+  font-size: clamp(50px, 8vw, 110px);
+  font-weight: 900;
+  z-index: 1;
+  /* Behind blur like the vector */
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(40px);
+  animation: revealVector 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.9s forwards;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE LAYOUT (Screens < 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* 1. CENTRAL ALIGNMENT STRATEGY
+     On mobile, we force elements to the exact center using fixed positioning.
+     'left: 50%' and 'top: 50%' combined with 'transform: translate(-50%, -50%)'
+     ensures a perfect dead-center anchor point. */
+  .base-image,
+  .loader-text,
+  .background-vector {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    top: 50% !important;
+    bottom: auto !important;
+  }
+
+  .screen-blur {
+    backdrop-filter: blur(0.8px) !important;
+    -webkit-backdrop-filter: blur(0.8px) !important;
+    z-index: 20 !important;
+    /* Above text/vector, below logo */
+    opacity: 1 !important;
+    transition: none !important;
+    /* No animation as requested */
+  }
+
+  /* 3. SCALE VIA 'vmin' (Responsive Proportion)
+     We use 'vmin' instead of 'px' or 'vw' for mobile sizing.
+     1vmin = 1% of the SHORTER side of the screen.
+     This ensures the logo never overflows and maintains its 
+     proportions perfectly whether the phone is upright or sideways. */
+  .image-container {
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    /* Adjust this value to change the OVERALL size of the central logo on mobile */
+    width: 42vmin !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    z-index: 30 !important;
+    /* Higher than blur */
+    animation: spinAndGrow 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+      floatPulse 2.2s ease-in-out 1.2s infinite !important;
+  }
+
+  /* MATCHING THE BASE IMAGE SIZE
+     We set the base image to the same vmin width as the container. */
+  .base-image {
+    width: 42vmin !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
+
+  /* 3. VERTICAL OFFSETTING (Top/Bottom Elements)
+     Since everything is fixed at the center, we use 'margin-top' 
+     with negative/positive vmin values to "push" elements up or down 
+     relative to the center logo. */
+
+  .background-vector {
+    /* Pushes the SVG vector UP (above the logo) */
+    margin-top: -50vmin !important;
+    width: 35vmin !important;
+    z-index: 1 !important;
+    opacity: 0;
+    animation: revealMobile 0.5s ease-out 0.6s forwards !important;
+    display: block;
+    filter: blur(8px);
+  }
+
+  .loader-text {
+    /* Pushes the percentage text DOWN (below the logo) */
+    margin-top: 50vmin !important;
+    font-size: 8vmin !important;
+    color: #494944;
+    z-index: 1 !important;
+    opacity: 0;
+    animation: revealMobile 0.4s ease-out 0.7s forwards !important;
+    display: block;
+    filter: blur(5px);
+  }
+
+
+  .hyper-spin {
+    animation: hyperSpin 0.5s cubic-bezier(0.7, 0, 0.84, 0) forwards !important;
+  }
+}
+
+/* ----------------- Clean Up Laptop View ----------------- */
+@media (min-width: 769px) {
+  .card-overlay {
+    display: none !important;
+  }
+}
+
+/* ----------------- Navbar Styles ----------------- */
+.main-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 3vh 5vw;
+  /* Responsive Padding */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  z-index: 10001;
+  /* Must be higher than menu overlay */
+  transform: translateY(-100%);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.main-nav.visible {
+  transform: translateY(0);
+}
+
+.nav-logo-icon {
+  height: 9vmin;
+  /* Responsive Size - Increased */
+  width: auto;
+  display: block;
+}
+
+.nav-logo-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 8vmin;
+  /* Increased size */
+  width: auto;
+}
+
+.burger-menu {
+  width: 3.5vmin;
+  /* Responsive Size */
+  height: 2.2vmin;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.burger-menu span {
+  display: block;
+  width: 100%;
+  height: 12%;
+  background-color: #494944;
+  border-radius: 4px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
+/* Burger to X Animation */
+.burger-menu.open span:nth-child(1) {
+  transform: translateY(1vmin) rotate(45deg);
+}
+
+.burger-menu.open span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.burger-menu.open span:nth-child(3) {
+  transform: translateY(-1vmin) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .burger-menu.open span:nth-child(1) {
+    transform: translateY(2.5vmin) rotate(45deg);
+  }
+
+  .burger-menu.open span:nth-child(3) {
+    transform: translateY(-2.5vmin) rotate(-45deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-nav {
+    padding: 2.5vh 5vw;
+  }
+
+  .nav-logo-icon {
+    height: 12vw;
+  }
+
+  .nav-logo-text {
+    display: none !important;
+    /* Hidden on mobile */
+  }
+
+  .burger-menu {
+    width: 8vmin;
+    /* Larger on mobile */
+    height: 5.5vmin;
+  }
+}
+
+/* ----------------- Image Grid / Accordion Styles ----------------- */
+.image-grid {
+  position: fixed;
+  top: 14vh;
+  left: 0;
+  width: 100vw;
+  height: 88vh;
+  display: none;
+  /* Shown via .active */
+  z-index: 900;
+  flex-direction: row;
+  /* Desktop horizontal strips */
+  overflow: hidden;
+  /* CLIPS FALLING IMAGES */
+}
+
+.image-grid.active {
+  display: flex !important;
+}
+
+.grid-column {
+  flex: 1;
+  /* Stretch to fill width on laptop */
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transform: translateY(-200%);
+  /* Falling start */
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Desktop hover expansion effect */
+@media (min-width: 769px) {
+  .grid-column {
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1), flex 0.4s ease;
+  }
+
+  .grid-column:hover {
+    flex: 1.5;
+  }
+}
+
+/* Laptop Image Visibility */
+.desktop-only-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Falling Animation (Global) */
+.grid-column.fall {
+  animation: dropIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes dropIn {
+  0% {
+    transform: translateY(-200%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Hide accordion content on laptop */
+.grid-column .card-overlay,
+.grid-column .expanded-content {
+  display: none !important;
+}
+
+/* Hide desktop elements on mobile only */
+@media (max-width: 768px) {
+  .desktop-info-container {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+
+  /* Desktop Info Container */
+  .desktop-info-container {
+    position: absolute;
+    bottom: 3vh;
+    left: 0vw;
+    right: 3vw;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  /* Desktop Title - Always Visible */
+  .desktop-title {
+    color: white;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    font-family: 'Satoshi-Bold', sans-serif;
+    padding: 1rem;
+  }
+
+  /* Desktop Hover Description - Expands on Hover */
+  .desktop-hover-description {
+    color: white;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+  }
+
+  .desktop-hover-description p {
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    line-height: 1.6;
+    margin: 0;
+    padding: 1rem 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  }
+
+  .grid-column:hover .desktop-hover-description {
+    max-height: 200px;
+    opacity: 1;
+    padding: 0 1rem;
+  }
+
+  /* Subtle, classy bottom shadow - appears on hover only */
+  .grid-column::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 25%, transparent 40%);
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .grid-column:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ----------------- Mobile Responsive (Accordion Mode) ----------------- */
+@media (max-width: 768px) {
+  .image-grid {
+    flex-direction: column !important;
+    /* Stacked cards */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 95vw !important;
+    height: 84vh !important;
+    top: 10vh !important;
+    gap: 12px !important;
+    padding: 10px 0 100px 0 !important;
+    overflow-y: auto !important;
+    /* Scrolling enabled */
+    background: transparent !important;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .image-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Use background-image for mobile cards */
+  .grid-column {
+    flex: none !important;
+    width: 100% !important;
+    height: 100px !important;
+    border-radius: 26px !important;
+    box-shadow: none !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-color: transparent !important;
+    /* Initial state for mobile entrance animation */
+    transform: translateY(60px);
+    opacity: 0;
+    transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Mobile Entrance Animation Keyframes */
+  @keyframes mobileCardEnter {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Trigger animation when 'fall' class is added (page load) */
+  .grid-column.fall {
+    animation: mobileCardEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    /* Delays are handled by inline styles in App.tsx */
+  }
+
+  /* Explicit Background Images for Mobile Accordion */
+  .grid-column:nth-child(1) {
+    background-image: url('/clinic-hero.png') !important;
+  }
+
+  .grid-column:nth-child(2) {
+    background-image: url('/roofer-hero.png') !important;
+  }
+
+  .grid-column:nth-child(3) {
+    background-image: url('/hvac-hero.png') !important;
+  }
+
+  .grid-column:nth-child(4) {
+    background-image: url('/Rectangle 10.png') !important;
+  }
+
+  .grid-column.active-card {
+    height: 420px !important;
+    /* Expansion height */
+  }
+
+  /* Hide raw img tag on mobile */
+  .desktop-only-img {
+    display: none !important;
+  }
+
+  /* Mobile Content Display */
+  .grid-column .card-overlay {
+    display: flex !important;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 40%), rgba(0, 0, 0, 0.3) !important;
+    padding: 24px;
+    flex-direction: column;
+    color: white;
+  }
+
+  /* New Mobile Structure Styles */
+  .mobile-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+  }
+
+  .mobile-card-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+    font-family: 'Satoshi-Bold', sans-serif;
+    transition: font-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .grid-column.active-card .mobile-card-title {
+    font-size: 3.5rem;
+  }
+
+  .mobile-expanded-details {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-top: 16px;
+
+    /* Initial State for Animation */
+    opacity: 0;
+    max-height: 0;
+    filter: blur(12px);
+    transform: scale(0.92) translateY(8px);
+    top: 50%;
+
+    /* Premium smooth transition */
+    transition:
+      max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.5s ease 0.1s,
+      filter 0.5s ease 0.1s,
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+  }
+
+  .mobile-expanded-details.expanded {
+    opacity: 1;
+    max-height: 500px;
+    filter: blur(0);
+    transform: scale(1) translateY(0);
+    flex: 1;
+  }
+
+  .mobile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: auto;
+  }
+
+  .mobile-tag-pill {
+    padding: 8px 16px;
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    background: transparent;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+  }
+
+  .mobile-description {
+    font-size: 14px;
+    line-height: 1.4;
+    color: white;
+    margin: 0;
+    flex: 1;
+    /* Allow description to take space next to button */
+  }
+
+  .mobile-footer {
+    display: flex;
+    align-items: center;
+    /* Align center vertically */
+    justify-content: space-between;
+    /* Spread text and button */
+    gap: 16px;
+    padding-top: 16px;
+  }
+
+  .mobile-action-btn {
+    width: 64px;
+    height: 64px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
+
+/* ----------------- Menu Overlay Styles ----------------- */
+/* ----------------- Menu Overlay Styles ----------------- */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.96);
+  z-index: 9999;
+  /* Top level overlay */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  backdrop-filter: blur(12px);
+}
+
+.menu-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  text-align: center;
+}
+
+.menu-link {
+  font-family: 'Satoshi-Bold', sans-serif;
+  font-size: 2.5rem;
+  color: #1c1917;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background: none;
+
+  /* Initial Animation State */
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+}
+
+/* Staggered Animations */
+.menu-overlay.open .menu-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu-overlay.open .menu-link:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.menu-overlay.open .menu-link:nth-child(2) {
+  transition-delay: 0.15s;
+}
+
+.menu-overlay.open .menu-link:nth-child(3) {
+  transition-delay: 0.2s;
+}
+
+.menu-overlay.open .menu-link:nth-child(4) {
+  transition-delay: 0.25s;
+}
+
+.menu-overlay.open .menu-link:nth-child(5) {
+  transition-delay: 0.3s;
+}
+
+.menu-link:hover {
+  color: #78716c;
+  transform: scale(1.05) translateY(0);
+}
+
+.menu-link.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: translateY(0);
+}
+
+/* Mobile specific menu sizing */
+@media (max-width: 768px) {
+  .menu-link {
+    font-size: 2rem;
+  }
+}
