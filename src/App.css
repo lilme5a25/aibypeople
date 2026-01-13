@@ -9,7 +9,7 @@ body {
   background: white !important;
   /* Force clean white */
   overflow: hidden;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
 }
 
 /* ----------------- Splash / Logo Styles ----------------- */
@@ -51,7 +51,6 @@ body {
 }
 
 @keyframes floatPulse {
-
   0%,
   100% {
     transform: translate(-50%, -50%) scale(2) rotate(1800deg);
@@ -96,6 +95,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
+  /* Optimized: Reduced blur significantly */
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   z-index: 5;
@@ -181,7 +181,7 @@ body {
   left: 75%;
   transform: translateY(-50%);
   color: #494944;
-  font-family: 'Satoshi-Bold', sans-serif;
+  font-family: "Satoshi-Bold", sans-serif;
   font-size: clamp(50px, 8vw, 110px);
   font-weight: 900;
   z-index: 1;
@@ -196,7 +196,6 @@ body {
    MOBILE RESPONSIVE LAYOUT (Screens < 768px)
    ============================================================ */
 @media (max-width: 768px) {
-
   /* 1. CENTRAL ALIGNMENT STRATEGY
      On mobile, we force elements to the exact center using fixed positioning.
      'left: 50%' and 'top: 50%' combined with 'transform: translate(-50%, -50%)'
@@ -279,7 +278,6 @@ body {
     display: block;
     filter: blur(5px);
   }
-
 
   .hyper-spin {
     animation: hyperSpin 0.5s cubic-bezier(0.7, 0, 0.84, 0) forwards !important;
@@ -477,7 +475,6 @@ body {
 }
 
 @media (min-width: 769px) {
-
   /* Desktop Info Container */
   .desktop-info-container {
     position: absolute;
@@ -497,7 +494,7 @@ body {
     font-size: clamp(1.5rem, 3vw, 2.5rem);
     font-weight: 700;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    font-family: 'Satoshi-Bold', sans-serif;
+    font-family: "Satoshi-Bold", sans-serif;
     padding: 1rem;
   }
 
@@ -528,10 +525,15 @@ body {
 
   /* Subtle, classy bottom shadow - appears on hover only */
   .grid-column::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 25%, transparent 40%);
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.4) 25%,
+      transparent 40%
+    );
     pointer-events: none;
     z-index: 5;
     opacity: 0;
@@ -599,19 +601,19 @@ body {
 
   /* Explicit Background Images for Mobile Accordion */
   .grid-column:nth-child(1) {
-    background-image: url('/clinic-hero.png') !important;
+    background-image: url("/clinic-hero.png") !important;
   }
 
   .grid-column:nth-child(2) {
-    background-image: url('/roofer-hero.png') !important;
+    background-image: url("/roofer-hero.png") !important;
   }
 
   .grid-column:nth-child(3) {
-    background-image: url('/hvac-hero.png') !important;
+    background-image: url("/hvac-hero.png") !important;
   }
 
   .grid-column:nth-child(4) {
-    background-image: url('/Rectangle 10.png') !important;
+    background-image: url("/Rectangle 10.png") !important;
   }
 
   .grid-column.active-card {
@@ -629,7 +631,8 @@ body {
     display: flex !important;
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 40%), rgba(0, 0, 0, 0.3) !important;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 40%),
+      rgba(0, 0, 0, 0.3) !important;
     padding: 24px;
     flex-direction: column;
     color: white;
@@ -648,7 +651,7 @@ body {
     font-weight: 700;
     margin: 0;
     line-height: 1.1;
-    font-family: 'Satoshi-Bold', sans-serif;
+    font-family: "Satoshi-Bold", sans-serif;
     transition: font-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -670,10 +673,8 @@ body {
     top: 50%;
 
     /* Premium smooth transition */
-    transition:
-      max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-      opacity 0.5s ease 0.1s,
-      filter 0.5s ease 0.1s,
+    transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.5s ease 0.1s, filter 0.5s ease 0.1s,
       transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
   }
 
@@ -771,7 +772,7 @@ body {
 }
 
 .menu-link {
-  font-family: 'Satoshi-Bold', sans-serif;
+  font-family: "Satoshi-Bold", sans-serif;
   font-size: 2.5rem;
   color: #1c1917;
   text-decoration: none;
@@ -782,7 +783,8 @@ body {
   /* Initial Animation State */
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.3s ease;
 }
 
 /* Staggered Animations */

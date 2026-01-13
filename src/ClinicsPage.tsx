@@ -1,6 +1,13 @@
-import React, { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { ArrowLeft, ArrowRight, UserCheck, ShieldCheck, Wrench, TrendingUp } from 'lucide-react';
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import {
+  ArrowLeft,
+  ArrowRight,
+  UserCheck,
+  ShieldCheck,
+  Wrench,
+  TrendingUp,
+} from "lucide-react";
 
 interface ClinicsPageProps {
   onBack: () => void;
@@ -22,7 +29,7 @@ const FeatureSection: React.FC<{
     type: "spring" as const,
     stiffness: 100,
     damping: 20,
-    mass: 1
+    mass: 1,
   };
 
   return (
@@ -35,18 +42,20 @@ const FeatureSection: React.FC<{
             className="benefit-idx"
             animate={{
               letterSpacing: isInView ? "0.4em" : "0.15em",
-              opacity: isInView ? 1 : 0.3
+              opacity: isInView ? 1 : 0.3,
             }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-          >
+            transition={{ duration: 1.2, ease: "easeOut" }}>
             ARCHITECTURE 0{index + 1}
           </motion.span>
 
           <motion.span
             className="benefit-emoji"
-            animate={isInView ? { scale: [0.8, 1.1, 1], rotate: [0, 5, 0] } : { scale: 0.8 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+            animate={
+              isInView
+                ? { scale: [0.8, 1.1, 1], rotate: [0, 5, 0] }
+                : { scale: 0.8 }
+            }
+            transition={{ duration: 0.8, delay: 0.2 }}>
             {icon}
           </motion.span>
         </div>
@@ -55,8 +64,7 @@ const FeatureSection: React.FC<{
           className="benefit-huge-title"
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ ...springTransition, delay: 0.1 }}
-        >
+          transition={{ ...springTransition, delay: 0.1 }}>
           {title}
         </motion.h2>
 
@@ -65,8 +73,7 @@ const FeatureSection: React.FC<{
             className="info-block"
             initial={{ opacity: 0, x: -20 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
+            transition={{ duration: 0.8, delay: 0.3 }}>
             <span className="info-label">Standard Operating Procedure</span>
             <p className="info-val">{system}</p>
           </motion.div>
@@ -82,9 +89,10 @@ const FeatureSection: React.FC<{
               />
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-                transition={{ ...springTransition, delay: 0.4 }}
-              >
+                animate={
+                  isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }
+                }
+                transition={{ ...springTransition, delay: 0.4 }}>
                 <span className="info-label highlight">Primary Outcome</span>
                 <p className="info-val strong">{impact}</p>
               </motion.div>
@@ -117,14 +125,16 @@ const ClinicsPage: React.FC<ClinicsPageProps> = ({ onBack, onGetInTouch }) => {
 
         .grain {
           position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: 0.04;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+          /* Optimized: Reduced numOctaves from 3 to 1 to reduce CPU usage */
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
         .bg-blob {
           position: fixed;
           width: 60vmax; height: 60vmax;
-          background: radial-gradient(circle, rgba(231, 229, 228, 0.4) 0%, transparent 70%);
-          filter: blur(80px); z-index: -1; pointer-events: none;
+          /* Optimized: Removed heavy blur(80px) filter. Using a smoother gradient instead. */
+          background: radial-gradient(circle, rgba(231, 229, 228, 0.4) 0%, rgba(231, 229, 228, 0) 70%);
+          z-index: -1; pointer-events: none;
         }
 
         /* NAVIGATION */
@@ -287,7 +297,7 @@ const ClinicsPage: React.FC<ClinicsPageProps> = ({ onBack, onGetInTouch }) => {
           y: [0, -50, 30, 0],
         }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        style={{ top: '5%', left: '-5%' }}
+        style={{ top: "5%", left: "-5%" }}
       />
       <motion.div
         className="bg-blob"
@@ -296,7 +306,7 @@ const ClinicsPage: React.FC<ClinicsPageProps> = ({ onBack, onGetInTouch }) => {
           y: [0, 50, -50, 0],
         }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        style={{ bottom: '5%', right: '-5%' }}
+        style={{ bottom: "5%", right: "-5%" }}
       />
 
       <nav className="lux-nav">
@@ -304,18 +314,26 @@ const ClinicsPage: React.FC<ClinicsPageProps> = ({ onBack, onGetInTouch }) => {
           <ArrowLeft size={18} />
           <span>Back</span>
         </button>
-        <button className="cta-nav-btn" onClick={onGetInTouch}>Get In touch</button>
+        <button className="cta-nav-btn" onClick={onGetInTouch}>
+          Get In touch
+        </button>
       </nav>
 
       <section className="lux-hero">
-        <div style={{ width: '100%' }}>
+        <div style={{ width: "100%" }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            style={{ marginBottom: '2.5rem' }}
-          >
-            <span style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '0.4em', color: '#A8A29E', textTransform: 'uppercase' }}>
+            style={{ marginBottom: "2.5rem" }}>
+            <span
+              style={{
+                fontSize: "0.65rem",
+                fontWeight: 900,
+                letterSpacing: "0.4em",
+                color: "#A8A29E",
+                textTransform: "uppercase",
+              }}>
               Clinic Business Operations
             </span>
           </motion.div>
@@ -324,8 +342,12 @@ const ClinicsPage: React.FC<ClinicsPageProps> = ({ onBack, onGetInTouch }) => {
             className="hero-title-main"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring" as const, stiffness: 100, damping: 15, delay: 0.2 }}
-          >
+            transition={{
+              type: "spring" as const,
+              stiffness: 100,
+              damping: 15,
+              delay: 0.2,
+            }}>
             Call every lead instantly, <br /> filter out tire-kickers.
           </motion.h1>
 
@@ -333,9 +355,9 @@ const ClinicsPage: React.FC<ClinicsPageProps> = ({ onBack, onGetInTouch }) => {
             className="hero-subtitle-main"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            Fill your schedule with qualified patients who will show up, without hiring more staff.
+            transition={{ duration: 1, delay: 0.5 }}>
+            Fill your schedule with qualified patients who will show up, without
+            hiring more staff.
           </motion.p>
         </div>
       </section>
@@ -370,7 +392,7 @@ const ClinicsPage: React.FC<ClinicsPageProps> = ({ onBack, onGetInTouch }) => {
             { icon: UserCheck, label: "Managed by Humans" },
             { icon: ShieldCheck, label: "100% Reliability" },
             { icon: Wrench, label: "Ongoing Updates" },
-            { icon: TrendingUp, label: "Performance Tracking" }
+            { icon: TrendingUp, label: "Performance Tracking" },
           ].map((item, idx) => (
             <motion.div
               key={idx}
@@ -378,8 +400,7 @@ const ClinicsPage: React.FC<ClinicsPageProps> = ({ onBack, onGetInTouch }) => {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
-              viewport={{ once: true }}
-            >
+              viewport={{ once: true }}>
               <item.icon size={24} /> {item.label}
             </motion.div>
           ))}
@@ -392,21 +413,29 @@ const ClinicsPage: React.FC<ClinicsPageProps> = ({ onBack, onGetInTouch }) => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.3 }}
-          transition={{ type: "spring" as const, stiffness: 80, damping: 15 }}
-        >
-          <h2 className="cta-headline">Ready to automate <br /> your clinic?</h2>
+          transition={{ type: "spring" as const, stiffness: 80, damping: 15 }}>
+          <h2 className="cta-headline">
+            Ready to automate <br /> your clinic?
+          </h2>
           <motion.div
             className="gold-button"
             onClick={onGetInTouch}
             whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-          >
+            whileTap={{ scale: 0.98 }}>
             Get Started Now <ArrowRight size={22} />
           </motion.div>
         </motion.div>
       </section>
 
-      <footer style={{ padding: '4rem 2rem', textAlign: 'center', opacity: 0.2, fontSize: '0.65rem', letterSpacing: '0.3em', scrollSnapAlign: 'start' }}>
+      <footer
+        style={{
+          padding: "4rem 2rem",
+          textAlign: "center",
+          opacity: 0.2,
+          fontSize: "0.65rem",
+          letterSpacing: "0.3em",
+          scrollSnapAlign: "start",
+        }}>
         &copy; {new Date().getFullYear()} AI BY PEOPLE. ESTABLISHED 2024.
       </footer>
     </div>
